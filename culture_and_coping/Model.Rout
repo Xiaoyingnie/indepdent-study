@@ -1,0 +1,610 @@
+
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> r = getOption("repos")
+> r["CRAN"] = "http://cran.us.r-project.org"
+> options(repos = r)
+> 
+> install.packages(c("brms", "tidyverse", "ggplot2", "loo", "rstan", "performance","readxl")) 
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/brms_2.21.0.tgz'
+Content type 'application/x-gzip' length 7228878 bytes (6.9 MB)
+==================================================
+downloaded 6.9 MB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/tidyverse_2.0.0.tgz'
+Content type 'application/x-gzip' length 428901 bytes (418 KB)
+==================================================
+downloaded 418 KB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/ggplot2_3.5.1.tgz'
+Content type 'application/x-gzip' length 4974305 bytes (4.7 MB)
+==================================================
+downloaded 4.7 MB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/loo_2.7.0.tgz'
+Content type 'application/x-gzip' length 1858253 bytes (1.8 MB)
+==================================================
+downloaded 1.8 MB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/rstan_2.32.6.tgz'
+Content type 'application/x-gzip' length 8945724 bytes (8.5 MB)
+==================================================
+downloaded 8.5 MB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/performance_0.12.0.tgz'
+Content type 'application/x-gzip' length 3509764 bytes (3.3 MB)
+==================================================
+downloaded 3.3 MB
+
+trying URL 'http://cran.us.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/readxl_1.4.3.tgz'
+Content type 'application/x-gzip' length 1538743 bytes (1.5 MB)
+==================================================
+downloaded 1.5 MB
+
+
+The downloaded binary packages are in
+	/var/folders/1y/gk13cyp11r57csry99m9htmr0000gs/T//RtmpJ6CixM/downloaded_packages
+> 
+> library(brms)
+Loading required package: Rcpp
+Loading 'brms' package (version 2.21.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').
+
+Attaching package: ‘brms’
+
+The following object is masked from ‘package:stats’:
+
+    ar
+
+> library(tidyverse)
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+> library(ggplot2)
+> library(loo)
+This is loo version 2.7.0
+- Online documentation and vignettes at mc-stan.org/loo
+- As of v2.0.0 loo defaults to 1 core but we recommend using as many as possible. Use the 'cores' argument or set options(mc.cores = NUM_CORES) for an entire session. 
+> library(rstan) 
+Loading required package: StanHeaders
+
+rstan version 2.32.6 (Stan version 2.32.2)
+
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores()).
+To avoid recompilation of unchanged Stan programs, we recommend calling
+rstan_options(auto_write = TRUE)
+For within-chain threading using `reduce_sum()` or `map_rect()` Stan functions,
+change `threads_per_chain` option:
+rstan_options(threads_per_chain = 1)
+
+
+Attaching package: ‘rstan’
+
+The following object is masked from ‘package:tidyr’:
+
+    extract
+
+> library(performance)
+> library(readxl)
+> 
+> data <-  read_excel("/Users/cmh/ms/Sp2024/nimisha/Capstone-Project/data/data.xlsx", sheet = "column_data") 
+> data <- na.omit(data)  
+> 
+> summary(data)  # Summary statistics
+    country        birth_sex          age       marital_status  num_siblings   
+ Min.   :1.000   Min.   :1.000   Min.   :18.0   Min.   :1.00   Min.   : 0.000  
+ 1st Qu.:1.000   1st Qu.:1.000   1st Qu.:22.0   1st Qu.:1.00   1st Qu.: 1.000  
+ Median :2.000   Median :2.000   Median :26.5   Median :1.00   Median : 1.000  
+ Mean   :1.981   Mean   :1.725   Mean   :28.4   Mean   :1.45   Mean   : 1.788  
+ 3rd Qu.:3.000   3rd Qu.:2.000   3rd Qu.:33.0   3rd Qu.:2.00   3rd Qu.: 2.000  
+ Max.   :3.000   Max.   :2.000   Max.   :71.0   Max.   :7.00   Max.   :10.000  
+  num_children    suicide_lifetime
+ Min.   :0.0000   Min.   :1.000   
+ 1st Qu.:0.0000   1st Qu.:1.000   
+ Median :0.0000   Median :2.000   
+ Mean   :0.5424   Mean   :2.182   
+ 3rd Qu.:1.0000   3rd Qu.:3.000   
+ Max.   :8.0000   Max.   :6.000   
+> str(data)      # Data types
+tibble [1,014 × 7] (S3: tbl_df/tbl/data.frame)
+ $ country         : num [1:1014] 1 1 1 1 1 1 1 1 1 1 ...
+ $ birth_sex       : num [1:1014] 1 2 2 1 2 2 2 2 1 2 ...
+ $ age             : num [1:1014] 38 36 28 35 27 23 20 28 27 27 ...
+ $ marital_status  : num [1:1014] 1 2 1 2 2 1 1 1 2 2 ...
+ $ num_siblings    : num [1:1014] 3 1 1 7 1 2 1 1 1 1 ...
+ $ num_children    : num [1:1014] 0 1 0 1 0 0 0 0 0 0 ...
+ $ suicide_lifetime: num [1:1014] 2 1 3 1 1 1 2 1 4 2 ...
+ - attr(*, "na.action")= 'omit' Named int [1:2] 558 665
+  ..- attr(*, "names")= chr [1:2] "558" "665"
+> head(data)     # View the first few rows
+# A tibble: 6 × 7
+  country birth_sex   age marital_status num_siblings num_children
+    <dbl>     <dbl> <dbl>          <dbl>        <dbl>        <dbl>
+1       1         1    38              1            3            0
+2       1         2    36              2            1            1
+3       1         2    28              1            1            0
+4       1         1    35              2            7            1
+5       1         2    27              2            1            0
+6       1         2    23              1            2            0
+# ℹ 1 more variable: suicide_lifetime <dbl>
+> 
+> formula1 <- suicide_lifetime ~ birth_sex  + age + marital_status + num_siblings + num_children + (1 | country) 
+> formula2 <- suicide_lifetime ~ birth_sex * (age + marital_status) + (1 | country) 
+> 
+> prior_thresholds <- c(
++   prior(normal(0,0.5), class = Intercept),
++   prior(normal(0,0.5), class = b),
++   prior(student_t(3,0,1), class = sd)
++ )
+> 
+> Model1 <- brm(
++   formula = formula1,
++   data = data,
++   family = cumulative("probit"),
++   prior = prior_thresholds,
++   warmup = 1000,
++   iter = 2000,
++   chains = 4,
++   seed = 42,
++   backend = 'rstan',
++   cores = 6
++ )
+Compiling Stan program...
+Start sampling
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
+Chain 1: Rejecting initial value:
+Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 1:   Stan can't start sampling from this initial value.
+Chain 3: 
+Chain 3: Gradient evaluation took 0.000349 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 3.49 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 1: 
+Chain 1: Gradient evaluation took 0.001061 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10.61 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 0.001691 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 16.91 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 2: 
+Chain 2: Gradient evaluation took 0.000697 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 6.97 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 14.732 seconds (Warm-up)
+Chain 1:                13.062 seconds (Sampling)
+Chain 1:                27.794 seconds (Total)
+Chain 1: 
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 16.093 seconds (Warm-up)
+Chain 4:                13.392 seconds (Sampling)
+Chain 4:                29.485 seconds (Total)
+Chain 4: 
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 15.729 seconds (Warm-up)
+Chain 3:                13.917 seconds (Sampling)
+Chain 3:                29.646 seconds (Total)
+Chain 3: 
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 15.029 seconds (Warm-up)
+Chain 2:                15.057 seconds (Sampling)
+Chain 2:                30.086 seconds (Total)
+Chain 2: 
+Warning messages:
+1: There were 5 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. 
+2: Examine the pairs() plot to diagnose sampling problems
+ 
+> 
+> save(Model1,file="Model1.RData")
+> 
+> Model2 <- brm(
++   formula = formula2,
++   data = data,
++   family = cumulative("probit"),
++   prior = prior_thresholds,
++   warmup = 1000,
++   iter = 2000,
++   chains = 4,
++   seed = 42,
++   backend = 'rstan',
++   cores = 6
++ )
+Compiling Stan program...
+Start sampling
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
+Chain 1: Rejecting initial value:
+Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 1:   Stan can't start sampling from this initial value.
+Chain 2: Rejecting initial value:
+Chain Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 2:   Stan can't start sampling from this initial value.
+1: Rejecting initial value:
+Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 1:   Stan can't start sampling from this initial value.
+Chain 2: Rejecting initial value:Chain 3: Rejecting initial value:
+Chain 3: 
+Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 2:   Stan can't start sampling from this initial value.
+  Log probability evaluates to log(0), i.e. negative infinity.
+Chain 3:   Stan can't start sampling from this initial value.
+Chain 2: Rejecting initial value:
+Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 2:   Stan can't start sampling from this initial value.
+Chain 4: 
+Chain 1: 
+Chain 4: Chain 1: Gradient evaluation took 0.00037 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.7 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Gradient evaluation took 0.000425 seconds
+Chain Chain 3: 
+Chain 1: 
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 4.25 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+3: Gradient evaluation took 0.000377 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 3.77 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 2: Rejecting initial value:
+Chain 2:   Gradient evaluated at the initial value is not finite.
+Chain 2:   Stan can't start sampling from this initial value.
+Chain 2: Rejecting initial value:
+Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 2:   Stan can't start sampling from this initial value.
+Chain 2: Rejecting initial value:
+Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
+Chain 2:   Stan can't start sampling from this initial value.
+Chain 2: 
+Chain 2: Gradient evaluation took 0.000227 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 2.27 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 20.516 seconds (Warm-up)
+Chain 1:                13.879 seconds (Sampling)
+Chain 1:                34.395 seconds (Total)
+Chain 1: 
+Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 20.724 seconds (Warm-up)
+Chain 2:                15.429 seconds (Sampling)
+Chain 2:                36.153 seconds (Total)
+Chain 2: 
+Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 22.736 seconds (Warm-up)
+Chain 3:                16.462 seconds (Sampling)
+Chain 3:                39.198 seconds (Total)
+Chain 3: 
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 22.1 seconds (Warm-up)
+Chain 4:                18.749 seconds (Sampling)
+Chain 4:                40.849 seconds (Total)
+Chain 4: 
+Warning messages:
+1: There were 4 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. 
+2: Examine the pairs() plot to diagnose sampling problems
+ 
+> 
+> save(Model2,file="Model2.RData")
+> 
+> loo_results <- list(
++   Intersectional_Model1 = loo(Model1),
++   Intersectional_Model2 = loo(Model2)
++ )
+> 
+> waic_results <- list( 
++   Intersectional_Model1 = waic(Model1),
++   Intersectional_Model2 = waic(Model2)
++ )
+> 
+> r2_results<-list( 
++   Modelraw_Intersectional_Model1_r2=performance::r2(Model1),
++   Modelraw_Intersectional_Model2_r2=performance::r2(Model2)
++ )
+Warning messages:
+1: Predictions are treated as continuous variables in 'bayes_R2' which is likely invalid for ordinal families. 
+2: Predictions are treated as continuous variables in 'bayes_R2' which is likely invalid for ordinal families. 
+3: Predictions are treated as continuous variables in 'bayes_R2' which is likely invalid for ordinal families. 
+4: Predictions are treated as continuous variables in 'bayes_R2' which is likely invalid for ordinal families. 
+> 
+> save(loo_results,file="LooModelReplication.RData")
+> save(waic_results,file="WAICModelReplication.RData")
+> save(r2_results,file="R2ModelReplication.RData")
+> 
+> loo_results_estimate <- list(
++   Intersectional_Model1_estimate = loo_results$Intersectional_Model1$estimates,
++   Intersectional_Model2_estimate = loo_results$Intersectional_Model2$estimates
++ )
+> 
+> waic_results_estimate <- list( 
++   Intersectional_Model1_estimate = waic_results$Intersectional_Model1$estimates,
++   Intersectional_Model2_estimate = waic_results$Intersectional_Model2$estimates
++ )
+> 
+> parameter_df<-tibble(Median=NA,CI=NA,Direction=NA,Significance=NA,Large=NA)
+> 
+> parameter_samples <- posterior_samples(Model1)
+Warning message:
+Method 'posterior_samples' is deprecated. Please see ?as_draws for recommended alternatives. 
+> colPosteriorall<-colnames(parameter_samples)
+> colPosterior <- colPosteriorall[grep("^b_", colPosteriorall)]
+> 
+> for (i in colPosterior){
++   print(i)
++   # Calculate the median of the posterior distribution
++   median_estimate <- median(parameter_samples[[i]])
++   
++   # Calculate the 95% Bayesian credible interval
++   credible_interval <- quantile(parameter_samples[[i]], c(0.025, 0.975))
++   
++   # Calculate the probability of direction (96% chance of being positive)
++   probability_direction <- mean(parameter_samples[[i]] > 0)
++   
++   # Calculate the probability of practical significance (95% chance of being > 0.05)
++   probability_practical_significance <- mean(parameter_samples[[i]] > 0.05)
++   
++   # Calculate the probability of having a large effect (89% chance of being > 0.30)
++   probability_large_effect <- mean(parameter_samples[[i]] > 0.30)
++   
++   parameter_df<-rbind(parameter_df,c(median_estimate,credible_interval,probability_direction,probability_practical_significance,probability_large_effect))
++   
++ }
+[1] "b_Intercept[1]"
+[1] "b_Intercept[2]"
+[1] "b_Intercept[3]"
+[1] "b_Intercept[4]"
+[1] "b_Intercept[5]"
+[1] "b_birth_sex"
+[1] "b_age"
+[1] "b_marital_status"
+[1] "b_num_siblings"
+[1] "b_num_children"
+Warning messages:
+1: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+2: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+3: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+4: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+5: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+6: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+7: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+8: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+9: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+10: In rbind(deparse.level, ...) :
+  number of columns of result, 5, is not a multiple of vector length 6 of arg 2
+> 
+> parameter_df<-parameter_df[-1,]
+> 
+> plottingBar <- function(gr1,l,k) { # create a function with the name my_function
++   titlex=paste("Probability of Suicide Lifetime by birth_sex ",k)
++   titlex=paste(titlex,l)
++   
++   m=ggplot(gr1, aes(x = birth_sex, y = estimate__*100, fill = !! sym(k), colour = !! sym(k))) +
++     geom_point(position = position_dodge(width = 0.3)) +
++     geom_errorbar(aes(ymin = lower__*100, ymax = upper__*100), width = 0.11, position = position_dodge(width = 0.3)) +
++     labs(
++       title = titlex ,
++       x = "Birth Sex",
++       y = "Probability Of Suicide Lifetime"
++     )+scale_y_continuous(
++       limits =   c(0,100))+
++     theme_minimal()
++   return (m)
++ }
+> 
+> ##
+> 
+> modelname="Model1 Intersection"
+> conditions <- expand.grid(marital_status=1, birth_sex =unique(data$birth_sex),age=27)
+> mod_plot <- conditional_effects(Model1,categorical = TRUE, effect ="birth_sex",conditions = conditions)
+> 
+> m=plot(mod_plot)[[1]]+facet_wrap("birth_sex")
+> 
+> gr=m$data
+> gr1=gr[gr$effect2__=="No",]
+> k="birth_sex"
+> 
+> gr1 <- subset(gr1, select = -cond__) 
+> gr2=distinct(gr1)
+> plotb=plottingBar(gr2,modelname,k)
+> ggsave(filename = "Overall_birth_sex.jpeg", plot = plotb, width = 8, height = 6) 
+> 
+> ####
+> 
+> # rater-gender,rater-race
+> conditions <- expand.grid(birth_sex =unique(data$birth_sex),marital_status=unique(data$marital_status))
+> 
+> mod_plot <- conditional_effects(Model1,categorical = TRUE, effect ="marital_status" , conditions = conditions)
+> 
+> m=plot(mod_plot)[[1]] +facet_wrap("marital_status")
+> 
+> gr=m$data
+> gr1=gr[gr$effect2__=="No",]
+> k="marital_status"
+> 
+> gr1 <- subset(gr1, select = -cond__) 
+> gr2=distinct(gr1)
+> plotb=plottingBar(gr2,modelname,k)
+> ggsave(filename = "Overall_birth_sex_and_marital_status.jpeg", plot = plotb, width = 16, height = 8) 
+> 
+> ####
+> 
+> modelname="Model1 Intersection"
+> conditions <- expand.grid(birth_sex=1, marital_status =unique(data$marital_status),age=27)
+> mod_plot <- conditional_effects(Model1,categorical = TRUE, effect ="marital_status",conditions = conditions)
+> 
+> m=plot(mod_plot)[[1]]+facet_wrap("marital_status")
+> 
+> gr=m$data
+> gr1=gr[gr$effect2__=="No",]
+> k="birth_sex"
+> 
+> gr1 <- subset(gr1, select = -cond__) 
+> gr2=distinct(gr1)
+> plotb=plottingBar(gr2,modelname,k)
+> ggsave(filename = "Overall_birth_sex.jpeg", plot = plotb, width = 8, height = 6) 
+> ##
+> 
+> 
+> proc.time()
+   user  system elapsed 
+349.991  14.266 224.313 
