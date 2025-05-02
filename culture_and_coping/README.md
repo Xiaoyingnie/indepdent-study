@@ -4,13 +4,4 @@ This project analyzes cross-cultural interpersonal risk factors for suicidal ide
 
 ## Directory Structure
 
-├── data/
-│ └── data.xlsx # Main dataset used for modeling
-├── Model.R # Main R script to preprocess, fit models, and generate plots
-├── Model1.RData # Saved fitted Model 1 object
-├── Model2.RData # Saved fitted Model 2 object
-├── LooModelReplication.RData # LOOIC evaluation results
-├── WAICModelReplication.RData # WAIC evaluation results
-├── R2ModelReplication.RData # R² values for models
-├── Overall_birth_sex.jpeg # Output plot for birth_sex
-├── Overall_birth_sex_and_marital_status.jpeg # Output plot for interaction effects
+<pre><code>## Directory Structure ``` project-folder/ ├── data/ │ └── data.xlsx # Raw dataset ├── Model.R # Main R script ├── Model1.RData # Saved model 1 ├── Model2.RData # Saved model 2 ├── LooModelReplication.RData # LOOIC results ├── WAICModelReplication.RData # WAIC results ├── R2ModelReplication.RData # R² results ├── Overall_birth_sex.jpeg # Plot: Suicide by birth sex └── Overall_birth_sex_and_marital_status.jpeg # Plot: Suicide by sex and marital status ``` </code></pre>
