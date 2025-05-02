@@ -36,4 +36,9 @@ You can install them with:
 ```r
 install.packages(c("brms", "rstan", "tidyverse", "ggplot2", "loo", "performance", "readxl"))
 
+On macOS: You must have Xcode Command Line Tools installed to compile Stan models:
+xcode-select --install
+
+
+
 ## How to Run
