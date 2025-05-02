@@ -4,13 +4,16 @@ This project analyzes cross-cultural interpersonal risk factors for suicidal ide
 
 ## Directory Structure
 
+```
+culture_and_coping/
 ├── data/
-│ └── data.xlsx # Raw dataset
-├── Model.R # Main R script (run this)
-├── Model1.RData # Saved output of Model 1
-├── Model2.RData # Saved output of Model 2
-├── LooModelReplication.RData # LOO evaluation results
-├── WAICModelReplication.RData # WAIC evaluation results
-├── R2ModelReplication.RData # R² statistics
-├── Overall_birth_sex.jpeg # Visualization: Birth sex
-└── Overall_birth_sex_and_marital_status.jpeg # Visualization: Birth sex + Marital status
+│   └── data.xlsx                                # Raw dataset
+├── Model.R                                      # Main R script (run this)
+├── Model1.RData                                 # Saved output of Model 1
+├── Model2.RData                                 # Saved output of Model 2
+├── LooModelReplication.RData                    # LOO evaluation results
+├── WAICModelReplication.RData                   # WAIC evaluation results
+├── R2ModelReplication.RData                     # R² statistics
+├── Overall_birth_sex.jpeg                       # Visualization: Birth sex
+└── Overall_birth_sex_and_marital_status.jpeg    # Visualization: Birth sex + Marital status
+```
