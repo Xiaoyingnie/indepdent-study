@@ -97,7 +97,7 @@ After the script completes:
 ## Done
 All results will be available in working directory.
 
-## ⚠️ Note on Runtime Performance
+## Note on Runtime Performance
 
 Running the full script using `source("Model.R")` may take significantly longer than executing it line by line in the R console. This is expected behavior due to the following reasons:
 
@@ -116,4 +116,5 @@ Running the full script using `source("Model.R")` may take significantly longer 
 4. **No Opportunity to Interrupt or Debug Early**  
    If something goes wrong during model fitting (e.g., divergent transitions), you won’t notice until the end.  
    Running it line by line allows early inspection and debugging.
+
 
