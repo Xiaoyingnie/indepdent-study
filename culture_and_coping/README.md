@@ -45,7 +45,30 @@ If you're using macOS, you must install the **Xcode Command Line Tools** to enab
 ```bash
 xcode-select --install
 ```
-
-
-
 ## How to Run
+Follow these steps to run the project from start to finish:
+### 1. Set the Working Directory
+Open RStudio, and set the working directory to the project folder (where `Model.R` is located):
+
+```r
+setwd("/path/to/your/project/folder")
+```
+### 2. Run the Script
+
+Run the main script to perform the full analysis:
+
+```r
+source("Model.R")
+```
+
+This script will:
+
+- Load and clean the dataset from data/data.xlsx
+
+- Fit two Bayesian multilevel models using brms
+
+- Save model outputs: Model1.RData, Model2.RData
+
+- Compute model evaluation metrics: LOO, WAIC, R²
+
+- Generate and save result visualizations in .jpeg format
