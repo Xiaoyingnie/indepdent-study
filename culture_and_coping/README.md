@@ -36,6 +36,7 @@ You can install them with:
 
 ```r
 install.packages(c("brms", "rstan", "tidyverse", "ggplot2", "loo", "performance", "readxl"))
+```
 
 ### For macOS Users
 
@@ -43,7 +44,7 @@ If you're using macOS, you must install the **Xcode Command Line Tools** to enab
 
 ```bash
 xcode-select --install
-
+```
 
 
 
