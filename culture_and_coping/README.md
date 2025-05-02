@@ -47,13 +47,18 @@ xcode-select --install
 ```
 ## How to Run
 Follow these steps to run the project from start to finish:
-### 1. Set the Working Directory
+
+### 1. Open the Project in RStudio
+- Open the R project file
+- Or, open the script `Model.R` Directly
+- 
+### 2. Set the Working Directory
 Open RStudio, and set the working directory to the project folder (where `Model.R` is located):
 
 ```r
 setwd("/path/to/your/project/folder")
 ```
-### 2. Run the Script
+### 3. Run the Script
 
 Run the main script to perform the full analysis:
 
@@ -72,3 +77,19 @@ This script will:
 - Compute model evaluation metrics: LOO, WAIC, R²
 
 - Generate and save result visualizations in .jpeg format
+
+### 4. View Results
+After the script completes:
+- **Model outputs** are saved as `.RData` files:
+  - `Model1.RData`
+  - `Model2.RData`
+
+- **Evaluation metrics** are saved in:
+  - `LooModelReplication.RData`
+  - `WAICModelReplication.RData`
+  - `R2ModelReplication.RData`
+
+- **Visualizations** can be found as:
+  - `Overall_birth_sex.jpeg`
+  - `Overall_birth_sex_and_marital_status.jpeg`
+
