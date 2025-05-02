@@ -17,3 +17,10 @@ culture_and_coping/
 ├── Overall_birth_sex.jpeg                       # Visualization: Birth sex
 └── Overall_birth_sex_and_marital_status.jpeg    # Visualization: Birth sex + Marital status
 ```
+
+## Prerequisites
+
+You will need R and RStudio installed. Required packages:
+
+```r
+install.packages(c("brms", "tidyverse", "ggplot2", "loo", "rstan", "performance", "readxl"))
