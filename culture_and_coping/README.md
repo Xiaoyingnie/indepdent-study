@@ -22,5 +22,18 @@ culture_and_coping/
 
 You will need R and RStudio installed. Required packages:
 
+Ensure you have the following R packages installed:
+- `brms`
+- `rstan`
+- `tidyverse`
+- `ggplot2`
+- `loo`
+- `performance`
+- `readxl`
+
+You can install them with:
+
 ```r
-install.packages(c("brms", "tidyverse", "ggplot2", "loo", "rstan", "performance", "readxl"))
+install.packages(c("brms", "rstan", "tidyverse", "ggplot2", "loo", "performance", "readxl"))
+
+## How to Run
