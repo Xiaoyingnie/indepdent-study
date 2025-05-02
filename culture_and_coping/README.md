@@ -1,4 +1,4 @@
-# : Culture and Coping
+# Culture and Coping
 
 This project analyzes cross-cultural interpersonal risk factors for suicidal ideation using multilevel Bayesian models in R. The models assess the effect of cultural orientation, social connectedness, and psychological variables (e.g., burdensomeness and belongingness) on suicide lifetime prevalence among young adults from Turkey, the US, and Korea.
 
@@ -88,8 +88,32 @@ After the script completes:
   - `LooModelReplication.RData`
   - `WAICModelReplication.RData`
   - `R2ModelReplication.RData`
+ 
 
 - **Visualizations** can be found as:
   - `Overall_birth_sex.jpeg`
   - `Overall_birth_sex_and_marital_status.jpeg`
+
+## Done
+All results will be available in working directory.
+
+## ⚠️ Note on Runtime Performance
+
+Running the full script using `source("Model.R")` may take significantly longer than executing it line by line in the R console. This is expected behavior due to the following reasons:
+
+1. **Model Compilation Overhead**  
+   Each time you run a `brm()` model, Stan compiles it into C++ code. This compilation can take 15–30+ seconds per model on macOS.  
+   When running the code line by line, the compiled model is retained in memory, which reduces redundant compilation time.
+
+2. **Lack of Intermediate Feedback**  
+   Using `source()` runs the entire script at once, so you won’t see any progress or partial output until it finishes.  
+   Running the script interactively provides real-time updates and better visibility into each step.
+
+3. **Stacked Computation Without Pauses**  
+   The script performs multiple heavy operations in a row (model fitting, LOO/WAIC evaluation, plotting).  
+   This consumes more CPU and memory in one go compared to manual step-by-step execution.
+
+4. **No Opportunity to Interrupt or Debug Early**  
+   If something goes wrong during model fitting (e.g., divergent transitions), you won’t notice until the end.  
+   Running it line by line allows early inspection and debugging.
 
