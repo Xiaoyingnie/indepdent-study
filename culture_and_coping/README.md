@@ -1,4 +1,4 @@
-# Capstone Project: Culture and Coping
+# : Culture and Coping
 
 This project analyzes cross-cultural interpersonal risk factors for suicidal ideation using multilevel Bayesian models in R. The models assess the effect of cultural orientation, social connectedness, and psychological variables (e.g., burdensomeness and belongingness) on suicide lifetime prevalence among young adults from Turkey, the US, and Korea.
 
