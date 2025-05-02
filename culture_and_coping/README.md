@@ -20,8 +20,9 @@ culture_and_coping/
 
 ## Prerequisites
 
-You will need R and RStudio installed. Required packages:
+To run this project, ensure you have **R** and **RStudio** installed on your machine.
 
+### Required R Packages
 Ensure you have the following R packages installed:
 - `brms`
 - `rstan`
@@ -36,8 +37,13 @@ You can install them with:
 ```r
 install.packages(c("brms", "rstan", "tidyverse", "ggplot2", "loo", "performance", "readxl"))
 
-On macOS: You must have Xcode Command Line Tools installed to compile Stan models:
+### For macOS Users
+
+If you're using macOS, you must install the **Xcode Command Line Tools** to enable C++ compilation for Stan models:
+
+```bash
 xcode-select --install
+
 
 
 
