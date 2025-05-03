@@ -51,7 +51,6 @@ Follow these steps to run the project from start to finish:
 ### 1. Open the Project in RStudio
 - Open the R project file
 - Or, open the script `Model.R` Directly
-- 
 ### 2. Set the Working Directory
 Open RStudio, and set the working directory to the project folder (where `Model.R` is located):
 
