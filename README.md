@@ -46,7 +46,7 @@ If you're using macOS, you must install the **Xcode Command Line Tools** to enab
 xcode-select --install
 ```
 ## How to Run
-Follow these steps to run the project from start to finish:
+Follow these steps to run the project from start to end:
 
 ### 1. Open the Project in RStudio
 - Open the R project file
